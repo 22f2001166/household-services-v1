@@ -1,0 +1,27 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Household Services App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mt-5">Welcome to the Household Services App</h1>
+        <p class="lead">Your one-stop solution for all household services.</p>
+        <hr>
+        <div class="mt-4">
+            <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+            <a href="{{ url_for('customer_signup') }}" class="btn btn-success">Sign Up as Customer</a>
+            <a href="{{ url_for('professional_signup') }}" class="btn btn-info">Sign Up as Service Professional</a>
+        </div>
+        <p></p>
+        <a href="{{ url_for('static', filename='T&C.pdf') }}">Terms and Conditions</a>
+    </div>
+
+</body>
+
+</html>

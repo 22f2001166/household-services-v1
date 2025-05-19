@@ -1,0 +1,93 @@
+<!-- templates/professional_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Professional Dashboard - Household Services App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="mt-5">Welcome {{ session['role'] }},</h2>
+        <p class="lead">Service Requests:</p>
+        <form action="{{ url_for('professional_dashboard') }}" method="get" class="form-inline my-3">
+            <label for="search-date" class="mr-2">Search by Request Date:</label>
+            <input type="date" name="search_date" id="search-date" class="form-control mr-2"
+                value="{{ request.args.get('search_date') }}">
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Customer</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in service_requests %}
+                <tr>
+                    <td>{{ request.service.name }}</td>
+                    <td>{{ request.customer.name }}</td>
+                    <td>{{ request.request_date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ request.status }}</td>
+                    <td>
+                        {% if request.status == 'requested' %}
+                        <form action="{{ url_for('accept_service', request_id=request.id) }}" method="post">
+                            <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                        </form>
+                        {% endif %}
+                    </td>
+
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4">No service requests available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="lead">Accepted Requests:</p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Customer</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in accepted_requests %}
+                <tr>
+                    <td>{{ request.service.name }}</td>
+                    <td>{{ request.customer.name }}</td>
+                    <td>{{ request.request_date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ request.status }}</td>
+                    <td>
+                        {% if request.status == 'completed' %}
+                        {{ request.rating }}
+                        {% else %}
+                        {{ 'Not rated yet' }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">No service requests available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-end">
+            <a href="{{ url_for('edit_professional_profile') }}" class="btn btn-secondary mr-2">Edit Profile</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+<!-- templates/manage_requests.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Service Requests - Household Services App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="mt-5">Manage Service Requests</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Customer</th>
+                    <th>Details</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in requests %}
+                <tr>
+                    <td>{{ request.service.name }}</td>
+                    <td>{{ request.customer.user.Name }}</td>
+                    <td>{{ request.details or 'N/A' }}</td>
+                    <td>{{ request.request_date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ request.status }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">No service requests at the moment.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('professional_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </div>
+</body>
+
+</html>

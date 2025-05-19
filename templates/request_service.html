@@ -1,0 +1,22 @@
+<!-- templates/request_success.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Service Request Success - Household Services App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="mt-5">Service Request Successful!</h2>
+        <p class="lead">Your service request has been submitted successfully.</p>
+        <p class="lead">Service Name: {{ service_name }}</p>
+        <p class="lead">You will be notified once a service professional has been assigned.</p>
+
+        <a href="{{ url_for('customer_dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+    </div>
+</body>
+
+</html>

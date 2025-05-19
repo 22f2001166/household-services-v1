@@ -1,0 +1,58 @@
+<!-- templates/professional_signup.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Professional Sign Up - Household Services App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="mt-5">Sign Up as Service Professional</h2>
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        <form method="POST" action="{{ url_for('professional_signup') }}" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" name="name" class="form-control" required placeholder="Enter full name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" class="form-control" required placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" class="form-control" required placeholder="Choose a username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" required placeholder="Create a password">
+            </div>
+            <div class="form-group">
+                <label for="service_type">Service Type</label>
+                <select name="service_type" class="form-control" required>
+                    <option value="" disabled selected>Select a service type</option>
+                    {% for category in service_categories %}
+                    <option value="{{ category.category }}">{{ category.category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="experience">Experience (Years)</label>
+                <input type="number" name="experience" class="form-control" required min="0"
+                    placeholder="Enter years of experience">
+            </div>
+            <div class="form-group">
+                <label for="work_document">Upload Work Document (PDF only)</label>
+                <input type="file" name="work_document" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-success">Sign Up</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Home</a>
+        </form>
+    </div>
+</body>
+
+</html>

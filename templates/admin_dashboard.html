@@ -1,0 +1,232 @@
+<!-- templates/admin_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Household Services App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="mt-5">Admin Dashboard</h2>
+        <p>Your details are here admin!</p>
+        <p></p>
+        <h3 class="mt-4">Customers</h3>
+
+        <form action="{{ url_for('admin_dashboard') }}" method="get" class="form-inline my-3">
+            <input type="text" name="searchc" class="form-control mr-sm-2" placeholder="Search by Name or Email"
+                value="{{ request.args.get('searchc') }}">
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </form>
+        <p></p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Flagged</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td>{{ customer.user.Name }}</td>
+                    <td>{{ customer.user.Email }}</td>
+                    <td>{{ 'Yes' if customer.user.flagged else 'No' }}</td>
+                    <td>
+                        {% if not customer.user.flagged %}
+                        <form action="{{ url_for('flag_user', user_id=customer.user.id) }}" method="post">
+                            <button type="submit" class="btn btn-warning btn-sm">Flag</button>
+                        </form>
+                        {% else %}
+                        <form action="{{ url_for('unflag_user', user_id=customer.user.id) }}" method="post">
+                            <button type="submit" class="btn btn-success btn-sm">Unflag</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="{{ url_for('delete_user', user_id=customer.user.id) }}" method="post">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3">No customers found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3 class="mt-4">Service Professionals</h3>
+        <!-- <form method="GET" action="{{ url_for('admin_dashboard') }}"></form>
+        <div class="form-group">
+            <input type="text" name="searchp" class="form-control" placeholder="Search by Name or Email">
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Search</button>
+        </form> -->
+        <form action="{{ url_for('admin_dashboard') }}" method="get" class="form-inline my-3">
+            <input type="text" name="searchp" class="form-control mr-sm-2" placeholder="Search by Name or Email"
+                value="{{ request.args.get('searchp') }}">
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </form>
+        <p></p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Service Type</th>
+                    <th>Experience</th>
+                    <th>Flagged</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for professional in professionals %}
+                <tr>
+                    <td>{{ professional.user.Name }}</td>
+                    <td>{{ professional.user.Email }}</td>
+                    <td>{{ professional.ServiceType }}</td>
+                    <td>{{ professional.Experience }} years <a
+                            href="{{ url_for('serve_file', filename=professional.Document) }}" target="_blank">
+                            Document</a>
+                    </td>
+                    <td>{{ 'Yes' if professional.user.flagged else 'No' }}</td>
+                    <td>
+                        {% if not professional.user.flagged %}
+                        <form action="{{ url_for('flag_user', user_id=professional.user.id) }}" method="post">
+                            <button type="submit" class="btn btn-warning btn-sm">Flag</button>
+                        </form>
+                        {% else %}
+                        <form action="{{ url_for('unflag_user', user_id=professional.user.id) }}" method="post">
+                            <button type="submit" class="btn btn-success btn-sm">Unflag</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="{{ url_for('delete_user', user_id=professional.user.id) }}" method="post">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">No professionals found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h3 class="mt-4">Service Management</h3>
+        <a href="{{ url_for('add_service') }}" class="btn btn-outline-success mb-3">Add New Service</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Availability</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in service %}
+                <tr>
+                    <td>{{ service.name }}</td>
+                    <td>{{ service.category }}</td>
+                    <td>${{ service.price }}</td>
+                    <td>{{ 'Yes' if service.availability else 'No' }}</td>
+                    <td>
+                        {% if not service.availability %}
+                        <form action="{{ url_for('available_service', service_id=service.id) }}" method="post">
+                            <button type="submit" class="btn btn-warning btn-sm">Available</button>
+                        </form>
+                        {% else %}
+                        <form action="{{ url_for('unavailable_service', service_id=service.id) }}" method="post">
+                            <button type="submit" class="btn btn-success btn-sm">Unavailable</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="{{ url_for('delete_service', service_id=service.id) }}" method="post">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4">You have not added any services yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h3 class="mt-4">All Service Requests:</h3>
+        <img src="{{ url_for('service_requests_summary') }}" alt="Service Requests Summary" class="img-fluid mt-3">
+        <p></p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Professional</th>
+                    <th>Customer</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in service_requests %}
+                <tr>
+                    <td>{{ request.service.name }}</td>
+                    <td>{{ request.professional.user.Name }}</td>
+                    <td>{{ request.customer.name }}</td>
+                    <td>{{ request.request_date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ request.status }}</td>
+                    <td>
+                        {% if request.status == 'completed' %}
+                        {{ request.rating }}
+                        {% else %}
+                        {{ 'Not rated yet' }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">No service requests available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p></p>
+        <h3 class="mt-4">Unaccepted Service Requests:</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Customer</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in unaccepted_requests %}
+                <tr>
+                    <td>{{ request.service.name }}</td>
+                    <td>{{ request.customer.name }}</td>
+                    <td>{{ request.request_date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ request.status }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4">No unaccepted requests available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </div>
+    <p></p>
+</body>
+
+</html>
